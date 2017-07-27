@@ -1,0 +1,20 @@
+{
+    "manifest_version": 2,
+    "name": "JTab",
+    "version": "0.0.0.1",
+    "description": "Japacurry for tabs",
+    "icons": {},
+    "browser_action": {},
+    "author": "Distsys-Japa",
+    "background": {
+        "persistent": false,
+        "scripts": ["background.js"]
+    },
+    "commands": {},
+    "options_page": "options.html",
+    "options_ui": {
+        "chrome_style": true,
+        "page": "options.html"
+    },
+    "permissions": ["tabs"]
+}
