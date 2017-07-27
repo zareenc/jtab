@@ -11,7 +11,10 @@
     "author": "Distsys-Japa",
     "background": {
         "persistent": false,
-        "scripts": ["background.js"]
+        "scripts": [
+            "lib/helpers.js",
+            "background.js"
+        ]
     },
     "commands": {},
     "options_page": "options.html",
