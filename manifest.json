@@ -5,6 +5,9 @@
     "description": "Making tabs great again - almost as great as Japacurry",
     "icons": {},
     "browser_action": {},
+    "page_action": {
+        "default_title": "jtab"
+    }
     "author": "Distsys-Japa",
     "background": {
         "persistent": false,
