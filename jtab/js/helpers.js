@@ -16,6 +16,7 @@ function newTabCallback(tab) {
 	localStorage.setObject('tabs', currentTabs);
 }
 
+// Pinning and unpinning functions
 function pinCallback(tab) {
 	if (getTabById(tab.id) !== undefined && getTabKey(tab.id,'pinned') === true) {
 		console.log("Unpinning");
@@ -37,4 +38,9 @@ function pinTab(tab) {
 function unpinTab(tab) {
   console.log('Unpinning tab: ' + tab.url);
   setTabKey(tab.id, 'pinned', false);
+}
+
+// Navigation to URL
+function navigateCallback(tab) {
+	
 }
