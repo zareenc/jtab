@@ -9,8 +9,8 @@
     "background": {
         "persistent": false,
         "scripts": [
-            "lib/storage.js",
-            "lib/helpers.js",
+            "js/storage.js",
+            "js/helpers.js",
             "background.js"
         ]
     },
