@@ -2,7 +2,7 @@ function closeTab(tab) {
 	chrome.tabs.remove(tab.id);
 }
 
-function newTabCallback(tab){
+function newTabCallback(tab) {
 	var currentTabs = localStorage.getObject('tabs');
 	if(currentTabs === null){
 		currentTabs = {};
@@ -16,30 +16,25 @@ function newTabCallback(tab){
 	localStorage.setObject('tabs', currentTabs);
 }
 
+function pinCallback(tab) {
+	if (getTabById(tab.id) !== undefined && getTabKey(tab.id,'pinned') === true) {
+		console.log("Unpinning");
+		unpinTab(tab);
+	} else {
+		console.log("Pinning");
+		pinTab(tab);
+	}
+}
+
 function pinTab(tab) {
   console.log('Pinning tab: ' + tab.url);
-  var storageVal = {'pinned': 'True'}
-  localStorage.setItem(tab.id, storageVal)
-  console.log('Pinned tab: ' + localStorage[tab.id])
+  if (getTabById(tab.id) === undefined) {
+  	newTabCallback(tab);
+  }
+  setTabKey(tab.id, 'pinned', true);
 }
 
 function unpinTab(tab) {
   console.log('Unpinning tab: ' + tab.url);
-  chrome.tabs.executeScript({
-    code: 'document.body.style.backgroundColor="red"'
-  });
-}
-
-function getTabById(tabId){
-	return getAllTabs()[tabId]
-}
-
-function getAllTabs(){
-	return localStorage.getObject('tabs') || {};
-}
-
-function setTabKey(tabId, key, value){
-	var tabs = getAllTabs()
-	tabs[tabId][key] = value;
-	localStorage.setObject('tabs', tabs);
+  setTabKey(tab.id, 'pinned', false);
 }
