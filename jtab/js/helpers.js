@@ -16,6 +16,10 @@ function newTabCallback(tab) {
 	localStorage.setObject('tabs', currentTabs);
 }
 
+function deleteTabCallback(tabId) {
+	deleteTab(tabId);
+}
+
 // Pinning and unpinning functions
 function pinCallback(tab) {
 	if (getTabById(tab.id) !== undefined && getTabKey(tab.id,'pinned') === true) {
