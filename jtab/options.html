@@ -1,9 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>JTab Options</title>
+  <title>JTab Options</title>
 </head>
 <body>
-	<h1>Hello</h1>
+  <div class="header">
+    <h1>JTab Options</h1>
+  </div>
+
+  <div class="body">
+    <fieldset>
+      <legend>Toggle options</legend>
+      <table>
+        <tr>
+          <td colspan="2" class="checkboxRow">
+            <label>
+              <input type="checkbox" id="close_dup_tabs"/>
+              Close duplicate tabs
+            </label>
+            <label>
+              <input type="checkbox" id="close_old_tabs"/>
+              Close old tabs (haven't been interacted with for a set duration)
+            </label>
+          </td>
+        </tr>
+      </table>
+    </fieldset>
+  </div>
 </body>
 </html>
