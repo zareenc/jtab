@@ -1,3 +1,1 @@
-
-getTabUrls()
-console.log('hello')
+chrome.tabs.onCreated.addListener(newTabCallback)
