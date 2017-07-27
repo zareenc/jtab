@@ -5,14 +5,16 @@ function closeTab(tab) {
 function newTabCallback(tab){
 	var currentTabs = localStorage.getObject('tabs');
 	if(currentTabs === null){
-		currentTabs = []
+		currentTabs = [];
 	}
 	var currentTime = Date.now();
 	tab.createdAt = currentTime;
 	tab.updatedAt = currentTime;
-	localStorage.setObject('tabs', tab)
+	currentTabs.push(tab)
+	localStorage.setObject('tabs', currentTabs);
 }
 
 function getAllTabs(tab){
-	return localStorage.getObject('tabs') || []
+	return localStorage.getObject('tabs') || [];
 }
+

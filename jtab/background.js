@@ -1,1 +1,1 @@
-chrome.tabs.onCreated.addListener(newTabCallback)
+chrome.tabs.onCreated.addListener(newTabCallback);
