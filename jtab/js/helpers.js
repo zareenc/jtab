@@ -1,5 +1,5 @@
-function closeTab(tabId) {
-	chrome.tabs.remove(tabId);
+function closeTab(tab) {
+	chrome.tabs.remove(tab.id);
 }
 
 function newTabCallback(tab){
