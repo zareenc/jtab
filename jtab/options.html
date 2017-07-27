@@ -1,26 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/stylesheet.css" type="text/css" media="all"/>
+  <link rel="stylesheet" href="css/stylesheet-options.css" type="text/css" media="all"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <title>JTab Options</title>
 </head>
 <body>
-  <div class="header">
-    <h1>JTab Options</h1>
+  <div class="row">
+    <div class="col-md-12"><h1>JTab Options</h1></div>
   </div>
 
-  <div class="body">
-    <fieldset>
+  <div class="row">
+    <fieldset class="col-md-12">
       <legend>Toggle options</legend>
       <table>
         <tr>
-          <td colspan="2" class="checkboxRow">
+          <td colspan="2" class="toggle-title">Duplicate tabs</td>
+        </tr>
+        <tr>
+          <td colspan="2" class="checkbox-row">
             <label>
-              <input type="checkbox" id="close_dup_tabs"/>
-              Close duplicate tabs
+              <input type="checkbox" id="close-dup-tabs"/>
+              Close automatically
             </label>
+          </td>
+        </tr>
+        <td colspan="2" class="toggle-title">Old tabs</td>
+        <tr>
+          <td colspan="2" class="checkbox-row">
             <label>
-              <input type="checkbox" id="close_old_tabs"/>
-              Close old tabs (haven't been interacted with for a set duration)
+              <input type="checkbox" id="close-old-tabs"/>
+              Close automatically
             </label>
           </td>
         </tr>
