@@ -25,3 +25,9 @@ function setTabKey(tabId, key, value) {
 	tabs[tabId][key] = value;
 	localStorage.setObject('tabs', tabs);
 }
+
+function deleteTab(tabId) {
+	tabs = getAllTabs();
+	delete tabs[tabId]
+	localStorage.setObject('tabs', tabs);
+}
