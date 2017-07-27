@@ -5,12 +5,14 @@ function closeTab(tab) {
 function newTabCallback(tab){
 	var currentTabs = localStorage.getObject('tabs');
 	if(currentTabs === null){
-		currentTabs = [];
+		currentTabs = {};
 	}
 	var currentTime = Date.now();
-	tab.createdAt = currentTime;
-	tab.updatedAt = currentTime;
-	currentTabs.push(tab)
+	currentTabs[tab.id] = {
+		createdAt: currentTime,
+		updatedAt: currentTime,
+		pinned: false
+	};
 	localStorage.setObject('tabs', currentTabs);
 }
 
@@ -28,7 +30,16 @@ function unpinTab(tab) {
   });
 }
 
-function getAllTabs(tab){
-	return localStorage.getObject('tabs') || [];
+function getTabById(tabId){
+	return getAllTabs()[tabId]
 }
 
+function getAllTabs(){
+	return localStorage.getObject('tabs') || {};
+}
+
+function setTabKey(tabId, key, value){
+	var tabs = getAllTabs()
+	tabs[tabId][key] = value;
+	localStorage.setObject('tabs', tabs);
+}
