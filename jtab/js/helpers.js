@@ -1,14 +1,16 @@
-function closeTab(tabId) {
-	chrome.tabs.remove(tabId)
+function closeTab(tab) {
+	chrome.tabs.remove(tab.id);
 }
 
-function getTabUrls() {
-	chrome.tabs.query({},function(tabs){     
-		console.log("\n/////////////////////\n");
-		tabs.forEach(function(tab){
-			console.log(tab.url);
-		});
-	});	
+function newTabCallback(tab){
+	var currentTabs = localStorage.getObject('tabs');
+	if(currentTabs === null){
+		currentTabs = []
+	}
+	var currentTime = Date.now();
+	tab.createdAt = currentTime;
+	tab.updatedAt = currentTime;
+	localStorage.setObject('tabs', tab)
 }
 
 function pinTab(tab) {
@@ -23,4 +25,8 @@ function unpinTab(tab) {
   chrome.tabs.executeScript({
     code: 'document.body.style.backgroundColor="red"'
   });
+}
+
+function getAllTabs(tab){
+	return localStorage.getObject('tabs') || []
 }
