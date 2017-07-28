@@ -1,0 +1,9 @@
+label {
+  font-weight: normal !important;
+  padding-left: 1em;
+  padding-bottom: 0.5em;
+}
+
+.toggle-title {
+  font-weight: bold;
+}

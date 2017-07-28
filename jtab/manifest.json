@@ -23,8 +23,8 @@
         "page": "options.html"
     },
     "permissions": [
-        "tabs", 
-        "activeTab", 
+        "tabs",
+        "activeTab",
         "http://*/",
         "https://*/"
     ]
