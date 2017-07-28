@@ -21,7 +21,7 @@ Storage.prototype.getObject = function(key) {
  */
 function getOptions() {
   if ("options" in localStorage) {
-    return JSON.parse(localStorage["options"])
+    return localStorage.getObject("options")
   } else {
     return {}
   }
@@ -32,9 +32,26 @@ function getOptions() {
  *  :param value: option value
  */
 function setOption(option, value) {
-  options = getOptions()
-  options[option] = value
-  localStorage["options"] = JSON.stringify(options)
+  var options = getOptions()
+  var ks = option.split(".")
+
+  if (!(ks[0] in options)) {
+    options[ks[0]] = {}
+  }
+
+  if (ks.length == 1) {
+    options[option]["type"] = value
+  } else {
+    var v = options
+    for (var i = 0; i < ks.length-1; i++) {
+      if (!(ks[i] in v)) {
+        v[ks[i]] = {}
+      }
+      v = v[ks[i]]
+    }
+    v[ks[ks.length-1]] = value
+  }
+  localStorage.setObject("options", options)
 }
 
 /* Gets an option from local storage
@@ -42,8 +59,22 @@ function setOption(option, value) {
  *  :return: option value or undefined, if does not exist
  */
 function getOption(option) {
-  options = getOptions()
-  return options[option]
+  var options = getOptions()
+  var ks = option.split(".")
+
+  if (ks.length == 1) {
+    return option in options ? options[option]["type"] : undefined
+  } else {
+    var v = options
+    for (var i in ks) {
+      if (ks[i] in v) {
+        v = v[ks[i]]
+      } else {
+        return undefined
+      }
+    }
+    return v
+  }
 }
 
 
@@ -82,7 +113,7 @@ function deleteTab(tabId, windowId) {
 		tabAgesByWindow.splice(tabAgesByWindow.indexOf(tabId), 1);
 		tabAges[windowId] = tabAgesByWindow;
 		localStorage.setObject('tabAges', tabAges);
-	} 
+	}
 	console.log("Tab ages after deleting " + tabAges);
 }
 
@@ -104,5 +135,3 @@ function getTabAgeIndex(tabId, windowId) {
 	var win = getWindowById(windowId);
 	return win.indexOf(tabId);
 }
-
-
