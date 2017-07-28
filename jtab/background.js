@@ -2,16 +2,18 @@
 // and delete old tabs
 chrome.tabs.onCreated.addListener(function(tab) {
 	newTabCallback(tab);
-	updateTabAge(tab.id);
+	updateTabAge(tab.id, tab.windowId);
 	deleteOldTabCallback(tab);
 });
 
 chrome.tabs.onActivated.addListener(function(activeInfo) {
-	updateTabAge(activeInfo.tabId);
-})
+	updateTabAge(activeInfo.tabId, activeInfo.windowId);
+});
 
 // When tab is deleted, remove tab info from localStorage
-chrome.tabs.onRemoved.addListener(deleteTabCallback);
+chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
+	deleteTabCallback(tabId, removeInfo.windowId);
+});
 
 // Delete duplicate tabs
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {

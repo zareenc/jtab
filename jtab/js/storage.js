@@ -70,16 +70,39 @@ function setTabKey(tabId, key, value) {
 	localStorage.setObject('tabs', tabs);
 }
 
-function deleteTab(tabId) {
+function deleteTab(tabId, windowId) {
 	tabs = getAllTabs();
 	delete tabs[tabId]
 	localStorage.setObject('tabs', tabs);
 
 	var tabAges = localStorage.getObject('tabAges');
 	console.log("Tab ages before deleting" + tabAges);
-	if (tabAges !== null && tabAges.indexOf(tabId) > -1) {
-		tabAges.splice(tabAges.indexOf(tabId), 1);
+	if (tabAges && tabAges[windowId] && tabAges[windowId].indexOf(tabId) > -1) {
+		var tabAgesByWindow = tabAges[windowId];
+		tabAgesByWindow.splice(tabAgesByWindow.indexOf(tabId), 1);
+		tabAges[windowId] = tabAgesByWindow;
+		localStorage.setObject('tabAges', tabAges);
 	} 
-	localStorage.setObject('tabAges', tabAges);
 	console.log("Tab ages after deleting " + tabAges);
 }
+
+
+/////////////////////////////////////////
+// Tab age local storage helper functions
+/////////////////////////////////////////
+
+function getTabAges() {
+	return localStorage.getObject('tabAges') || {};
+}
+
+function getWindowById(windowId) {
+	var tabAges = getTabAges();
+	return tabAges[windowId] || [];
+}
+
+function getTabAgeIndex(tabId, windowId) {
+	var win = getWindowById(windowId);
+	return win.indexOf(tabId);
+}
+
+

@@ -17,13 +17,13 @@ function newTabCallback(tab) {
 	localStorage.setObject('tabs', currentTabs);
 }
 
-function closeTab(tabId) {
+function closeTab(tabId, windowId) {
 	chrome.tabs.remove(tabId);
-	deleteTabCallback(tabId);
+	deleteTabCallback(tabId, windowId);
 }
 
-function deleteTabCallback(tabId) {
-	deleteTab(tabId);
+function deleteTabCallback(tabId, windowId) {
+	deleteTab(tabId, windowId);
 }
 
 ////////////////////////////////////
@@ -31,7 +31,7 @@ function deleteTabCallback(tabId) {
 ////////////////////////////////////
 
 function pinCallback(tab) {
-	if (getTabById(tab.id) !== undefined && getTabKey(tab.id,'pinned')) {
+	if (getTabById(tab.id) && getTabKey(tab.id,'pinned')) {
 		console.log("Unpinning");
 		unpinTab(tab);
 		getDuplicateTabs(tab);
@@ -71,7 +71,7 @@ function removeDuplicateTabs(results, tabId) {
 	for (i = 0; i < results.length; i++) {
 		tab = results[i];
 		pinned = getTabKey(tab.id, "pinned");
-		if (tab.id !== tabId && pinned === false) {
+		if (tab.id !== tabId && !pinned) {
 			console.log("Duplicate tab: " + tab.id + " " + tab.url);
 			closeTab(tab.id);
 		}
@@ -86,17 +86,19 @@ function clearTabAge() {
 	localStorage.setObject('tabAges', []);
 }
 
-function updateTabAge(tabId) {
+function updateTabAge(tabId, windowId) {
 	var tabAges = localStorage.getObject('tabAges');
-	if (tabAges === null){
-		tabAges = [];
+	if (tabAges === null) {
+		tabAges = {};
 	}
 	console.log("Tab ages before update:" + tabAges);
 
-	if (tabAges.indexOf(tabId) > -1) {
-		tabAges.splice(tabAges.indexOf(tabId), 1);
+	var tabAgesByWindow = tabAges[windowId] || [];
+	if (tabAgesByWindow.indexOf(tabId) > -1) {
+		tabAgesByWindow.splice(tabAgesByWindow.indexOf(tabId), 1);
 	} 
-	tabAges.splice(0, 0, tabId);
+	tabAgesByWindow.splice(0, 0, tabId);
+	tabAges[windowId] = tabAgesByWindow;
 	localStorage.setObject('tabAges', tabAges);
 	console.log("Tab ages after update:" + tabAges);
 }
@@ -105,29 +107,30 @@ function deleteOldTabCallback(tab) {
 	if (getOption('close_old_tabs')) {
 		// TODO: first check if max tabs set in options
 		var maxTabs = 10; // TODO: get max value from options
-		checkNumTabs(maxTabs);
+		checkNumTabs(maxTabs, tab.windowId);
 	}
 }
 
-function checkNumTabs(maxTabs) {
+function checkNumTabs(maxTabs, windowId) {
 	chrome.tabs.query({currentWindow: true}, function(results) {
 		if (results.length > maxTabs) {
-			deleteOldTabs(maxTabs, results);
+			deleteOldTabs(maxTabs, results, windowId);
 		}
 	})
 }
 
-function deleteOldTabs(maxTabs, results) {
+function deleteOldTabs(maxTabs, results, windowId) {
 	console.log('Deleting old tabs');
 	var tabAges = localStorage.getObject('tabAges');
-	if (tabAges !== null && tabAges.length > maxTabs) {
-		var i = tabAges.length - 1;
-		var numToDelete = tabAges.length - maxTabs;
+	if (tabAges && tabAges[windowId] && tabAges[windowId].length > maxTabs) {
+		var tabAgesByWindow = tabAges[windowId];
+		var i = tabAgesByWindow.length - 1;
+		var numToDelete = tabAgesByWindow.length - maxTabs;
 		var tabsToDelete = [];
 		while (i >= 0 && tabsToDelete.length < numToDelete) {
-			var pinned = getTabKey(tabAges[i], "pinned");
+			var pinned = getTabKey(tabAgesByWindow[i], "pinned");
 			if (!pinned) {
-				tabsToDelete.push(tabAges[i]);
+				tabsToDelete.push(tabAgesByWindow[i]);
 			}
 			i--;
 		}
