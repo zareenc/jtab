@@ -5,28 +5,28 @@ function recycleTab(tabId){
 			index: -1
 		});
 	}
-	getRecycleWindowId(getRecycleWindowCallback);
+	_getRecycleWindowId(getRecycleWindowCallback);
 }
 
-function getRecycleWindowId(callbackFn){
+function _getRecycleWindowId(callbackFn){
 	function newWindowCallback(windowId){
 		callbackFn(windowId)
 	}
 	var recycleWindowId = localStorage.getObject('recycleWindow');
 	if(recycleWindowId === null){
-		createRecycleWindow(newWindowCallback);
+		_createRecycleWindow(newWindowCallback);
 		return;
 	}
 	chrome.windows.get(recycleWindowId, function(recycleWindow){
 		if(chrome.runtime.lastError){
-			createRecycleWindow(newWindowCallback);
+			_createRecycleWindow(newWindowCallback);
 			return;
 		}
 		callbackFn(recycleWindow.id);
 	});
 }
 
-function createRecycleWindow(callbackFn){
+function _createRecycleWindow(callbackFn){
 	chrome.windows.create({
 		state: 'minimized'
 	}, function(recycleWindow){
@@ -52,5 +52,5 @@ function getRecycledTabs(callbackFn){
 	function getRecycleWindowCallback(recycleWindowId){
 		chrome.tabs.query({windowId: recycleWindowId}, tabQueryCallback)
 	}
-	getRecycleWindowId(getRecycleWindowCallback);
+	_getRecycleWindowId(getRecycleWindowCallback);
 }
