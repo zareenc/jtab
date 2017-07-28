@@ -2,8 +2,13 @@
 // and delete old tabs
 chrome.tabs.onCreated.addListener(function(tab) {
 	newTabCallback(tab);
+	updateTabAge(tab.id);
 	deleteOldTabCallback(tab);
 });
+
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+	updateTabAge(activeInfo.tabId);
+})
 
 // When tab is deleted, remove tab info from localStorage
 chrome.tabs.onRemoved.addListener(deleteTabCallback);

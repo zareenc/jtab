@@ -74,4 +74,12 @@ function deleteTab(tabId) {
 	tabs = getAllTabs();
 	delete tabs[tabId]
 	localStorage.setObject('tabs', tabs);
+
+	var tabAges = localStorage.getObject('tabAges');
+	console.log("Tab ages before deleting" + tabAges);
+	if (tabAges !== null && tabAges.indexOf(tabId) > -1) {
+		tabAges.splice(tabAges.indexOf(tabId), 1);
+	} 
+	localStorage.setObject('tabAges', tabAges);
+	console.log("Tab ages after deleting " + tabAges);
 }

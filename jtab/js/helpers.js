@@ -3,6 +3,7 @@
 ///////////////////////////////////////
 
 function newTabCallback(tab) {
+	// Add tab info to tabs key
 	var currentTabs = localStorage.getObject('tabs');
 	if(currentTabs === null){
 		currentTabs = {};
@@ -16,9 +17,9 @@ function newTabCallback(tab) {
 	localStorage.setObject('tabs', currentTabs);
 }
 
-function closeTab(tab) {
-	chrome.tabs.remove(tab.id);
-	deleteTabCallback(tab.id);
+function closeTab(tabId) {
+	chrome.tabs.remove(tabId);
+	deleteTabCallback(tabId);
 }
 
 function deleteTabCallback(tabId) {
@@ -72,7 +73,7 @@ function removeDuplicateTabs(results, tabId) {
 		pinned = getTabKey(tab.id, "pinned");
 		if (tab.id !== tabId && pinned === false) {
 			console.log("Duplicate tab: " + tab.id + " " + tab.url);
-			closeTab(tab);
+			closeTab(tab.id);
 		}
 	}
 }
@@ -80,6 +81,25 @@ function removeDuplicateTabs(results, tabId) {
 ////////////////////////////////////
 // Removing old tabs functions
 ////////////////////////////////////
+
+function clearTabAge() {
+	localStorage.setObject('tabAges', []);
+}
+
+function updateTabAge(tabId) {
+	var tabAges = localStorage.getObject('tabAges');
+	if (tabAges === null){
+		tabAges = [];
+	}
+	console.log("Tab ages before update:" + tabAges);
+
+	if (tabAges.indexOf(tabId) > -1) {
+		tabAges.splice(tabAges.indexOf(tabId), 1);
+	} 
+	tabAges.splice(0, 0, tabId);
+	localStorage.setObject('tabAges', tabAges);
+	console.log("Tab ages after update:" + tabAges);
+}
 
 function deleteOldTabCallback(tab) {
 	if (getOption('close_old_tabs')) {
@@ -91,13 +111,20 @@ function deleteOldTabCallback(tab) {
 
 function checkNumTabs(maxTabs) {
 	chrome.tabs.query({currentWindow: true}, function(results) {
-		if (results.length >= maxTabs) {
-			deleteOldTabs(maxTabs);
+		if (results.length > maxTabs) {
+			deleteOldTabs(maxTabs, results);
 		}
 	})
 }
 
-function deleteOldTabs(maxTabs) {
+function deleteOldTabs(maxTabs, results) {
 	console.log('Deleting old tabs');
-	// TODO: implement LRU deleting
+	var tabAges = localStorage.getObject('tabAges');
+	if (tabAges !== null && tabAges.length > maxTabs) {
+		for (i = maxTabs; i < tabAges.length; i++) {
+			console.log("Current tab id " + tabAges[i]);
+			closeTab(tabAges[i]);
+		}
+		console.log("Tab ages after deleting:" + tabAges);
+	}
 }
