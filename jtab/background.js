@@ -24,3 +24,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 // Toggle pinning and unpinning tabs
 chrome.browserAction.onClicked.addListener(pinCallback);
+
+// Clean up old tabs every 5 seconds
+window.setInterval(cleanTabs, 5000);
