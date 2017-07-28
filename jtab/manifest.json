@@ -23,9 +23,6 @@
         "page": "options.html"
     },
     "permissions": [
-        "tabs",
-        "activeTab",
-        "http://*/",
-        "https://*/"
+        "tabs"
     ]
 }

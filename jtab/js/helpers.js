@@ -1,36 +1,6 @@
-/////////////////////////////
-// Options helper functions
-/////////////////////////////
-
-/* Gets all options from local storage
- * :return: associative array of options
- */
-function getOptions() {
-  if ("options" in localStorage) {
-    return JSON.parse(localStorage["options"])
-  } else {
-    return {}
-  }
-}
-
-/* Save option in local storage
- *  :param option string: option name/key
- *  :param value: option value
- */
-function setOption(option, value) {
-  options = getOptions()
-  options[option] = value
-  localStorage["options"] = JSON.stringify(options)
-}
-
-/* Gets an option from local storage
- *  :param option string: option name/key
- *  :return: option value or undefined, if does not exist
- */
-function getOption(option) {
-  options = getOptions()
-  return options[option]
-}
+///////////////////////////////////////
+// Tab creation and deletion functions
+///////////////////////////////////////
 
 function newTabCallback(tab) {
 	var currentTabs = localStorage.getObject('tabs');
@@ -58,10 +28,12 @@ function deleteTabCallback(tabId) {
 ////////////////////////////////////
 // Pinning and unpinning functions
 ////////////////////////////////////
+
 function pinCallback(tab) {
 	if (getTabById(tab.id) !== undefined && getTabKey(tab.id,'pinned')) {
 		console.log("Unpinning");
 		unpinTab(tab);
+		getDuplicateTabs(tab);
 	} else {
 		console.log("Pinning");
 		pinTab(tab);
@@ -84,8 +56,9 @@ function unpinTab(tab) {
 }
 
 //////////////////////
-// Navigation to URL
+// Deduping functions
 //////////////////////
+
 function getDuplicateTabs(tab) {
 	console.log("Checking tab duplicates for: " + tab.url);
 	chrome.tabs.query({url: tab.url}, function(results) {
