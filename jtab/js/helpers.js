@@ -1,3 +1,7 @@
+/////////////////////////////
+// Options helper functions
+/////////////////////////////
+
 /* Gets all options from local storage
  * :return: associative array of options
  */
@@ -51,7 +55,9 @@ function deleteTabCallback(tabId) {
 	deleteTab(tabId);
 }
 
+////////////////////////////////////
 // Pinning and unpinning functions
+////////////////////////////////////
 function pinCallback(tab) {
 	if (getTabById(tab.id) !== undefined && getTabKey(tab.id,'pinned')) {
 		console.log("Unpinning");
@@ -68,22 +74,26 @@ function pinTab(tab) {
   	newTabCallback(tab);
   }
   setTabKey(tab.id, 'pinned', true);
+  chrome.browserAction.setIcon({path: "/images/icon-jtab.png"});
 }
 
 function unpinTab(tab) {
   console.log('Unpinning tab: ' + tab.url);
   setTabKey(tab.id, 'pinned', false);
+  chrome.browserAction.setIcon({path: "/images/icon-jtab-disabled.png"});
 }
 
+//////////////////////
 // Navigation to URL
-function pageUpdateCallback(tabId, changeInfo, tab) {
-	console.log("Tab checking duplicate for: " + tab.url);
+//////////////////////
+function getDuplicateTabs(tab) {
+	console.log("Checking tab duplicates for: " + tab.url);
 	chrome.tabs.query({url: tab.url}, function(results) {
-		removeDuplicate(results, tabId);
+		removeDuplicateTabs(results, tab.id);
 	});
 }
 
-function removeDuplicate(results, tabId) {
+function removeDuplicateTabs(results, tabId) {
 	for (i = 0; i < results.length; i++) {
 		tab = results[i];
 		pinned = getTabKey(tab.id, "pinned");

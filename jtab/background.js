@@ -4,7 +4,7 @@ chrome.tabs.onCreated.addListener(newTabCallback);
 // When URL is updated, delete duplicate tabs
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	if (changeInfo.url !== undefined && getOption('close_dup_tabs')) {
-		pageUpdateCallback(tabId, changeInfo, tab);
+		getDuplicateTabs(tab);
 	}
 });
 
