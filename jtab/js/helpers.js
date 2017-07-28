@@ -121,9 +121,19 @@ function deleteOldTabs(maxTabs, results) {
 	console.log('Deleting old tabs');
 	var tabAges = localStorage.getObject('tabAges');
 	if (tabAges !== null && tabAges.length > maxTabs) {
-		for (i = maxTabs; i < tabAges.length; i++) {
-			console.log("Current tab id " + tabAges[i]);
-			closeTab(tabAges[i]);
+		var i = tabAges.length - 1;
+		var numToDelete = tabAges.length - maxTabs;
+		var tabsToDelete = [];
+		while (i >= 0 && tabsToDelete.length < numToDelete) {
+			var pinned = getTabKey(tabAges[i], "pinned");
+			if (!pinned) {
+				tabsToDelete.push(tabAges[i]);
+			}
+			i--;
+		}
+
+		for (i = 0; i < tabsToDelete.length; i++) {
+			closeTab(tabsToDelete[i]);
 		}
 		console.log("Tab ages after deleting:" + tabAges);
 	}
