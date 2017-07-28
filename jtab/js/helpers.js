@@ -23,7 +23,7 @@ function deleteTabCallback(tabId) {
 
 // Pinning and unpinning functions
 function pinCallback(tab) {
-	if (getTabById(tab.id) !== undefined && getTabKey(tab.id,'pinned') === true) {
+	if (getTabById(tab.id) !== undefined && getTabKey(tab.id,'pinned')) {
 		console.log("Unpinning");
 		unpinTab(tab);
 	} else {
@@ -47,12 +47,10 @@ function unpinTab(tab) {
 
 // Navigation to URL
 function pageUpdateCallback(tabId, changeInfo, tab) {
-	if (changeInfo.url !== undefined) {
-		console.log("Tab checking duplicate for: " + tab.url);
-		chrome.tabs.query({url: tab.url}, function(results) {
-			removeDuplicate(results, tabId);
-		});
-	}
+	console.log("Tab checking duplicate for: " + tab.url);
+	chrome.tabs.query({url: tab.url}, function(results) {
+		removeDuplicate(results, tabId);
+	});
 }
 
 function removeDuplicate(results, tabId) {
