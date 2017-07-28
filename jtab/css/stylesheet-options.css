@@ -5,5 +5,13 @@ label {
 }
 
 .toggle-title {
-  font-weight: bold;
+  padding-right: 1em;
+}
+
+.number-row {
+  margin-left: 1em;
+}
+
+input[type="number"] {
+  width: 4em;
 }
