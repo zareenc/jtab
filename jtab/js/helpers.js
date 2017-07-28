@@ -76,3 +76,20 @@ function removeDuplicateTabs(results, tabId) {
 		}
 	}
 }
+
+////////////////////////////////////
+// Removing old tabs functions
+////////////////////////////////////
+
+function checkNumTabs(maxTabs) {
+	chrome.tabs.query({currentWindow: true}, function(results) {
+		if (results.length >= maxTabs) {
+			deleteOldTabs(maxTabs);
+		}
+	})
+}
+
+function deleteOldTabs(maxTabs) {
+	console.log('Deleting old tabs');
+	// TODO: implement LRU deleting
+}
