@@ -100,6 +100,7 @@ function updateTabAge(tabId, windowId) {
 	tabAgesByWindow.splice(0, 0, tabId);
 	tabAges[windowId] = tabAgesByWindow;
 	localStorage.setObject('tabAges', tabAges);
+	setTabKey(tabId, 'updatedAt', Date.now())
 	console.log("Tab ages after update:" + tabAges);
 }
 
@@ -139,5 +140,24 @@ function deleteOldTabs(maxTabs, results, windowId) {
 			closeTab(tabsToDelete[i]);
 		}
 		console.log("Tab ages after deleting:" + tabAges);
+	}
+}
+
+function cleanTabs(){
+	var maxAge = 10;
+	var orderedWindowTabs = localStorage.getObject('tabAges');
+	var tabData = localStorage.getObject('tabs');
+
+	for(var windowId in orderedWindowTabs){
+		var orderedTabs = orderedWindowTabs[windowId];
+		for (var i = orderedTabs.length - 1; i >= 0; i--) {
+			var tabId = orderedTabs[i];
+			var currentTab = tabData[tabId];
+			if( (currentTab.updatedAt - Date.now())/1000 > maxAge && !currentTab.pinned){
+				closeTab(tabId, windowId)
+			}else{
+				break;
+			}
+		}
 	}
 }
