@@ -18,12 +18,17 @@ function newTabCallback(tab) {
 }
 
 function closeTab(tabId, windowId) {
-	chrome.tabs.remove(tabId);
+	var recycled = 'enabled';
+	if (recycled === 'enabled') {
+		recycleTab(tabId);
+	} else {
+		chrome.tabs.remove(tabId);
+	}
 	deleteTabCallback(tabId, windowId);
 }
 
 function deleteTabCallback(tabId, windowId) {
-	deleteTab(tabId, windowId);
+	deleteTab(tabId, windowId);	
 }
 
 ////////////////////////////////////
