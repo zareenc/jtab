@@ -1,12 +1,8 @@
 // When new tab is created, add tab info to localStorage
+// and delete old tabs
 chrome.tabs.onCreated.addListener(function(tab) {
 	newTabCallback(tab);
-
-	if (getOption('close_old_tabs')) {
-		// TODO: first check if max tabs set in options
-		var maxTabs = 10; // TODO: get max value from options
-		checkNumTabs(maxTabs);
-	}
+	deleteOldTabCallback(tab);
 });
 
 // When tab is deleted, remove tab info from localStorage

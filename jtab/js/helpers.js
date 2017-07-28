@@ -81,6 +81,14 @@ function removeDuplicateTabs(results, tabId) {
 // Removing old tabs functions
 ////////////////////////////////////
 
+function deleteOldTabCallback(tab) {
+	if (getOption('close_old_tabs')) {
+		// TODO: first check if max tabs set in options
+		var maxTabs = 10; // TODO: get max value from options
+		checkNumTabs(maxTabs);
+	}
+}
+
 function checkNumTabs(maxTabs) {
 	chrome.tabs.query({currentWindow: true}, function(results) {
 		if (results.length >= maxTabs) {
