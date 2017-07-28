@@ -18,7 +18,7 @@ function newTabCallback(tab) {
 }
 
 function closeTab(tabId, windowId) {
-	var recycled = 'enabled';
+	var recycled = 'disabled';
 	if (recycled === 'enabled') {
 		recycleTab(tabId);
 	} else {
@@ -88,7 +88,7 @@ function removeDuplicateTabs(results, tabId) {
 ////////////////////////////////////
 
 function clearTabAge() {
-	localStorage.setObject('tabAges', []);
+	localStorage.setObject('tabAges', {});
 }
 
 function updateTabAge(tabId, windowId) {
@@ -106,7 +106,7 @@ function updateTabAge(tabId, windowId) {
 	tabAges[windowId] = tabAgesByWindow;
 	localStorage.setObject('tabAges', tabAges);
 	setTabKey(tabId, 'updatedAt', Date.now())
-	console.log("Tab ages after update:" + tabAges);
+	console.log("Tab ages after update:" + tabAges[windowId]);
 }
 
 function deleteOldTabCallback(tab) {
@@ -144,7 +144,7 @@ function deleteOldTabs(maxTabs, results, windowId) {
 		for (i = 0; i < tabsToDelete.length; i++) {
 			closeTab(tabsToDelete[i]);
 		}
-		console.log("Tab ages after deleting:" + tabAges);
+		console.log("Tab ages after deleting:" + tabAges[windowId]);
 	}
 }
 
