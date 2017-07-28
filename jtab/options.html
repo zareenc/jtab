@@ -20,23 +20,45 @@
       <legend>Toggle options</legend>
       <table>
         <tr>
-          <td colspan="2" class="toggle-title">Duplicate tabs</td>
-        </tr>
-        <tr>
-          <td colspan="2" class="checkbox-row">
-            <label>
-              <input type="checkbox" id="close_dup_tabs"/>
-              Close automatically
-            </label>
+          <td colspan="1" class="toggle-title">Duplicate tabs:</td>
+          <td colspan="1">
+            <select id="close_dup_tabs">
+              <option value="disabled">Disabled</option>
+              <option value="enabled">Enabled</option>
+            </select>
           </td>
         </tr>
-        <td colspan="2" class="toggle-title">Old tabs</td>
         <tr>
-          <td colspan="2" class="checkbox-row">
-            <label>
-              <input type="checkbox" id="close_old_tabs"/>
-              Close automatically
-            </label>
+          <td colspan="1" class="toggle-title">Old tabs:</td>
+          <td colspan="1">
+            <select id="close_old_tabs">
+              <option value="disabled">Disabled</option>
+              <option value="age">By Age</option>
+              <option value="count">By Count</option>
+            </select>
+          </td>
+        </tr>
+        <tr class="number-row">
+          <td colspan="2">
+            Close tabs after
+            <input type="number" min="0" id="close_old_tabs.age">
+            seconds
+          <td>
+        </tr>
+        <tr class="number-row">
+          <td colspan="2">
+            Close tabs when over
+            <input type="number" min="0" id="close_old_tabs.count">
+            tabs
+          </td>
+        </tr>
+        <tr>
+          <td colspan="1" class="toggle-title">Recycle tabs:</td>
+          <td colspan="1">
+            <select id="recycle_tabs">
+              <option value="disabled">Disabled</option>
+              <option value="enabled">Enabled</option>
+            </select>
           </td>
         </tr>
       </table>
