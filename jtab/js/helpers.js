@@ -1,7 +1,3 @@
-function closeTab(tab) {
-	chrome.tabs.remove(tab.id);
-}
-
 function newTabCallback(tab) {
 	var currentTabs = localStorage.getObject('tabs');
 	if(currentTabs === null){
@@ -14,6 +10,11 @@ function newTabCallback(tab) {
 		pinned: false
 	};
 	localStorage.setObject('tabs', currentTabs);
+}
+
+function closeTab(tab) {
+	chrome.tabs.remove(tab.id);
+	deleteTabCallback(tab.id);
 }
 
 function deleteTabCallback(tabId) {
@@ -45,6 +46,22 @@ function unpinTab(tab) {
 }
 
 // Navigation to URL
-function navigateCallback(tab) {
-	
+function pageUpdateCallback(tabId, changeInfo, tab) {
+	if (changeInfo.url !== undefined) {
+		console.log("Tab checking duplicate for: " + tab.url);
+		chrome.tabs.query({url: tab.url}, function(results) {
+			removeDuplicate(results, tabId);
+		});
+	}
+}
+
+function removeDuplicate(results, tabId) {
+	for (i = 0; i < results.length; i++) {
+		tab = results[i];
+		pinned = getTabKey(tab.id, "pinned");
+		if (tab.id !== tabId && pinned === false) {
+			console.log("Duplicate tab: " + tab.id + " " + tab.url);
+			closeTab(tab);
+		}
+	}
 }

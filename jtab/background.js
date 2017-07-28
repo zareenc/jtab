@@ -1,7 +1,8 @@
 // When new tab is created, add tab info to localStorage
 chrome.tabs.onCreated.addListener(newTabCallback);
 
-// When navigate to new URL, delete duplicate tabs
+// When URL is updated, delete duplicate tabs
+chrome.tabs.onUpdated.addListener(pageUpdateCallback);
 
 // When tab is deleted, remove tab info from localStorage
 chrome.tabs.onRemoved.addListener(deleteTabCallback);
