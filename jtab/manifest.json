@@ -13,6 +13,7 @@
         "scripts": [
             "js/storage.js",
             "js/helpers.js",
+            "js/tabmanager.js",
             "background.js"
         ]
     },
