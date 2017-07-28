@@ -9,7 +9,7 @@
     "background": {
         "persistent": false,
         "scripts": [
-            "lib/helpers.js",
+            "js/helpers.js",
             "background.js"
         ]
     },
