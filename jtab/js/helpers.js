@@ -18,13 +18,26 @@ function newTabCallback(tab) {
 }
 
 function closeTab(tabId, windowId) {
-	var recycled = 'disabled';
+	var recycled = getOption('recycle_tabs');
 	if (recycled === 'enabled') {
 		recycleTab(tabId);
 	} else {
 		chrome.tabs.remove(tabId);
 	}
 	deleteTabCallback(tabId, windowId);
+
+	// chrome.tabs.get(tabId, function(tabObj){
+	// 	if(tabObj.active || getTabKey(tabId,'pinned')){
+	// 		return;
+	// 	}
+	// 	var recycled = getOption('recycle_tabs');
+	// 	if (recycled === 'enabled') {
+	// 		recycleTab(tabId);
+	// 	} else {
+	// 		chrome.tabs.remove(tabId);
+	// 	}
+	// 	deleteTabCallback(tabId, windowId);
+	// });
 }
 
 function deleteTabCallback(tabId, windowId) {
@@ -110,9 +123,8 @@ function updateTabAge(tabId, windowId) {
 }
 
 function deleteOldTabCallback(tab) {
-	if (getOption('close_old_tabs')) {
-		// TODO: first check if max tabs set in options
-		var maxTabs = 10; // TODO: get max value from options
+	if (getOption('close_old_tabs') === 'count') {
+		var maxTabs = parseInt(getOption('close_old_tabs.count'));
 		checkNumTabs(maxTabs, tab.windowId);
 	}
 }
@@ -134,6 +146,7 @@ function deleteOldTabs(maxTabs, results, windowId) {
 		var numToDelete = tabAgesByWindow.length - maxTabs;
 		var tabsToDelete = [];
 		while (i >= 0 && tabsToDelete.length < numToDelete) {
+			console.log(tabAgesByWindow[i]);
 			var pinned = getTabKey(tabAgesByWindow[i], "pinned");
 			if (!pinned) {
 				tabsToDelete.push(tabAgesByWindow[i]);
@@ -148,20 +161,26 @@ function deleteOldTabs(maxTabs, results, windowId) {
 	}
 }
 
-function cleanTabs(){
-	var maxAge = 10;
-	var orderedWindowTabs = localStorage.getObject('tabAges');
-	var tabData = localStorage.getObject('tabs');
+function cleanTabs() {
+	if (getOption('close_old_tabs') === 'age') {
+		var maxAge = parseInt(getOption('close_old_tabs.age'));
+		var orderedWindowTabs = localStorage.getObject('tabAges');
+		var tabData = localStorage.getObject('tabs');
 
-	for(var windowId in orderedWindowTabs){
-		var orderedTabs = orderedWindowTabs[windowId];
-		for (var i = orderedTabs.length - 1; i >= 0; i--) {
-			var tabId = orderedTabs[i];
-			var currentTab = tabData[tabId];
-			if( (currentTab.updatedAt - Date.now())/1000 > maxAge && !currentTab.pinned){
-				closeTab(tabId, windowId)
-			}else{
-				break;
+		for(var windowId in orderedWindowTabs){
+			var orderedTabs = orderedWindowTabs[windowId];
+			for (var i = orderedTabs.length - 1; i >= 0; i--) {
+				var tabId = orderedTabs[i];
+				var currentTab = tabData[tabId];
+				if(!currentTab){
+					continue;
+				}
+				if( (Date.now() - currentTab.updatedAt)/1000 > maxAge && !currentTab.pinned){
+					console.log('closing tab' + tabId)
+					closeTab(tabId, windowId)
+				}else{
+					break;
+				}
 			}
 		}
 	}

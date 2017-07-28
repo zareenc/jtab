@@ -17,7 +17,7 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 
 // Delete duplicate tabs
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-	if (changeInfo.url !== undefined && getOption('close_dup_tabs')) {
+	if (changeInfo.url !== undefined && getOption('close_dup_tabs')==='enabled') {
 		getDuplicateTabs(tab);
 	}
 });
@@ -26,4 +26,4 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 chrome.browserAction.onClicked.addListener(pinCallback);
 
 // Clean up old tabs every 5 seconds
-window.setInterval(cleanTabs, 5000);
+window.setInterval(cleanTabs, 1000);
