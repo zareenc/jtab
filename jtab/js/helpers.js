@@ -65,13 +65,13 @@ function pinTab(tab) {
   	newTabCallback(tab);
   }
   setTabKey(tab.id, 'pinned', true);
-  chrome.browserAction.setIcon({path: "/images/icon-jtab.png"});
+  chrome.browserAction.setIcon({path: "/images/icon-jt-48.png"});
 }
 
 function unpinTab(tab) {
   console.log('Unpinning tab: ' + tab.url);
   setTabKey(tab.id, 'pinned', false);
-  chrome.browserAction.setIcon({path: "/images/icon-jtab-disabled.png"});
+  chrome.browserAction.setIcon({path: "/images/icon-jt-disabled-48.png"});
 }
 
 //////////////////////

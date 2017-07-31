@@ -3,7 +3,7 @@
     "name": "JTab",
     "version": "0.0.0.1",
     "description": "Making tabs great again - almost as great as Japacurry",
-    "icons": {},
+    "icons": {"48": "images/icon-jt-disabled-48.png"},
     "browser_action": {
         "default_title": "jtab"
     },
